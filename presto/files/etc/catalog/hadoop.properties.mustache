@@ -1,5 +1,5 @@
 connector.name=hive-hadoop2
-hive.metastore.uri=thrift://localhost:9083
+hive.metastore.uri={{HIVE_METASTORE_URI}}
 hive.config.resources=/opt/hadoop/etc/hadoop/core-site.xml,/opt/hadoop/etc/hadoop/hdfs-site.xml
 hive.non-managed-table-writes-enabled=false
 hive.parquet.use-column-names=true

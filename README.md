@@ -1,2 +1,1 @@
-# presto-docker
-Presto cluster
+# Presto-Docker

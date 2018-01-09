@@ -17,10 +17,11 @@ MAINTAINER Mithun Arunan <MithunMJ@github, mithun1848@gmail.com>
 RUN apt-get update && \ 
     apt-get install -y python uuid-runtime vim less jq
 
-# Environment variables
+# Mandatory environment variables for build
 ENV PRESTO_VERSION 0.184
 ENV PRESTO_HOME /opt/presto
 ENV PRESTO_DATA_DIR /var/presto/
+ENV PRESTO_CONF_DIR $PRESTO_HOME/etc/catalog/
 ENV JAVA_HOME /usr/java/default
 ENV PATH $PATH:$JAVA_HOME/bin
 
@@ -40,7 +41,7 @@ RUN mkdir -p $PRESTO_HOME && \
     cp -r presto-server-$PRESTO_VERSION/* $PRESTO_HOME && \
     rm -r presto-server-$PRESTO_VERSION && \
     rm presto-server-$PRESTO_VERSION.tar.gz && \
-    mv presto-cli $PRESTO_HOME/
+    mv presto-cli /usr/bin/
 
 #Copy jar files for AWS S3, Azure Blob (WASB), Azure Data lake store
 RUN cd $PRESTO_HOME/plugin/hive-hadoop2 && \ 
@@ -54,11 +55,29 @@ RUN cd $PRESTO_HOME/plugin/hive-hadoop2 && \
 # COPY CONFIGURATION FILES
 COPY ./files /opt/
 
-RUN chmod +x /opt/presto-configuration.sh && sleep 1 && \
-    /opt/presto-configuration.sh && \
-    chmod +x /opt/presto-start.sh && sleep 1 && \
-    mv /opt/catalog/ $PRESTO_HOME/etc/catalog/
+#Default for presto node configuration, can be overriden at runtime
+ENV PRESTO_JVM_MAX_HEAP 16G
+ENV PRESTO_COORDINATOR true
+ENV PRESTO_INCLUDE_COORDINATOR true
+ENV PRESTO_HTTP_PORT 8080
+ENV PRESTO_QUERY_MAX_MEMORY 12GB
+ENV PRESTO_QUERY_MAX_MEMORY_PER_NODE 6GB
+ENV PRESTO_DISCOVERY_URI http://localhost:8080
+ENV PRESTO_LOG_LEVEL INFO
+
+#Default for catalogs configuration, can be overriden at runtime
+ENV HIVE_METASTORE_URI thrift://localhost:9083
+ENV S3_AWS_ACCESS_KEY S3_AWS_ACCESS_KEY
+ENV S3_AWS_SECRET_KEY S3_AWS_SECRET_KEY
+
+RUN chmod +x /opt/bin/presto-configuration.sh && sleep 1 && \
+    chmod +x /opt/bin/presto-start.sh && sleep 1 && \
+    chmod +x /opt/bin/mo && sleep 1 && \
+    mv /opt/bin/* /usr/local/bin/ && \
+    mv /opt/etc/* $PRESTO_HOME/etc/ && \
+    rm -r /opt/etc/
 
 WORKDIR $PRESTO_HOME
 VOLUME ["$PRESTO_DATA_DIR"]
-CMD /opt/presto-start.sh
+ENTRYPOINT [ "presto-configuration.sh" ]
+CMD presto-start.sh
