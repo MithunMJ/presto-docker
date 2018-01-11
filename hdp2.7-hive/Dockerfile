@@ -66,7 +66,8 @@ RUN mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
 	mv /_build/hive/conf/* $HIVE_HOME/conf/ && \
 	mv /_build/etc/* /etc/ && \
 	mv /_build/bin/* /usr/local/bin/ && \
-	rm -rf /_build
+	rm -rf /_build && \
+	chmod +x /usr/local/bin/*
 
 ENV JAVA_HOME /usr/local/jdk1.8.0_151
 ENV JRE_HOME /usr/local/jdk1.8.0_151/jre
@@ -76,6 +77,12 @@ ENV HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
 
 # HIVE ports
 EXPOSE 9083 
+
+#Default hive configuration, can be overriden at runtime
+ENV MYSQL_HOST localhost
+ENV MYSQL_DATABASE metastore
+ENV MYSQL_USER_NAME root
+ENV MYSQL_PASSWORD root
 
 ENTRYPOINT [ "hdp-hive-configuration.sh" ]
 CMD hive --service metastore
