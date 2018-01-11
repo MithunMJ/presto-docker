@@ -19,7 +19,7 @@
 
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:mysql://localhost/metastore</value>
+        <value>jdbc:mysql://{{MYSQL_HOST}}/{{MYSQL_DATABASE}}</value>
         <description>the URL of the MySQL database</description>
     </property>
 
@@ -30,12 +30,12 @@
 
     <property>
         <name>javax.jdo.option.ConnectionUserName</name>
-        <value>root</value>
+        <value>{{MYSQL_USER_NAME}}</value>
     </property>
 
     <property>
         <name>javax.jdo.option.ConnectionPassword</name>
-        <value>root</value>
+        <value>{{MYSQL_PASSWORD}}</value>
     </property>
 
     <property>
@@ -57,11 +57,6 @@
         <name>hive.security.authorization.createtable.owner.grants</name>
         <value>ALL</value>
         <description>The set of privileges automatically granted to the owner whenever a table gets created.</description>
-    </property>
-
-    <property>
-        <name>hive.users.in.admin.role</name>
-        <value>hdfs,hive</value>
     </property>
 
 </configuration>

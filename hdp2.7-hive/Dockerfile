@@ -35,15 +35,6 @@ RUN mkdir -p $HADOOP_HOME && \
 	rm -rf apache-hive-$HIVE_VERSION* && \
 	rm -rf hadoop-$HADOOP_VERSION*
 
-# Copy configuration files
-COPY ./files /_build
-
-RUN mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
-	mv /_build/hive/conf/* $HIVE_HOME/conf/ && \
-	mv /_build/etc/* /etc/ && \
-	mv /_build/bin/* /usr/local/bin/ && \
-	rm -rf /_build
-
 # Setup sock proxy
 RUN yum install -y openssh openssh-clients openssh-server && yum -y clean all
 RUN ssh-keygen -t rsa -b 4096 -C "automation@prestodb.io" -N "" -f /root/.ssh/id_rsa \
@@ -53,35 +44,38 @@ RUN ssh-keygen -t rsa -b 4096 -C "automation@prestodb.io" -N "" -f /root/.ssh/id
 RUN chmod 755 /root && chmod 700 /root/.ssh
 RUN passwd --unlock root
 
-# HIVE ports
-EXPOSE 9083 
-
 RUN yum -y install wget && \
 	yum -y install mlocate && \
+	yum -y install which && \
+	yum -y install mysql-server mysql-connector-java && \
  	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz" && \
-	tar xzf jdk-8u151-linux-x64.tar.gz
-
-RUN rm -rf jdk-8u151-linux-x64.tar.gz
-
-RUN yum -y install which && \
-	yum -y install mysql-server mysql-connector-java
+	tar xzf jdk-8u151-linux-x64.tar.gz && \
+	rm -rf jdk-8u151-linux-x64.tar.gz && \
+	mv jdk1.8.0_151 /usr/local/ && \
+	cd /usr/local/jdk1.8.0_151 && \
+	yum -y install mysql && \
+	yum -y install python-setuptools && \
+	easy_install supervisor
 
 RUN ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar
-RUN mv jdk1.8.0_151 /usr/local/ && \
-	cd /usr/local/jdk1.8.0_151
 
-#	alternatives --install /usr/bin/java java /usr/local/jdk1.8.0_151/bin/java 2 && \
-#	alternatives --config java && \
-#	alternatives --install /usr/bin/jar jar /usr/local/jdk1.8.0_151/bin/jar 2 && \
-#	alternatives --set jar /usr/local/jdk1.8.0_151/bin/jar && \
-	#alternatives --set javac /usr/local/jdk1.8.0_151/bin/javac
+# Copy configuration files
+COPY ./files /_build
+
+RUN mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
+	mv /_build/hive/conf/* $HIVE_HOME/conf/ && \
+	mv /_build/etc/* /etc/ && \
+	mv /_build/bin/* /usr/local/bin/ && \
+	rm -rf /_build
 
 ENV JAVA_HOME /usr/local/jdk1.8.0_151
-ENV JRE_HOME /usr/lcoal/jdk1.8.0_151/jre
+ENV JRE_HOME /usr/local/jdk1.8.0_151/jre
 ENV PATH $PATH:/usr/local/jdk1.8.0_151/bin:/usr/local/jdk1.8.0_151/jre/bin
 ENV PATH=$HIVE_HOME/bin:$HADOOP_HOME/bin:$PATH
 ENV HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
 
-RUN yum -y install mysql
+# HIVE ports
+EXPOSE 9083 
 
-CMD supervisord -c /etc/supervisord.conf
+ENTRYPOINT [ "hdp-hive-configuration.sh" ]
+CMD hive --service metastore
