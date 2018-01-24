@@ -15,7 +15,7 @@ MAINTAINER Mithun Arunan <MithunMJ@github, mithun1848@gmail.com>
 
 # Mandatory environment variables for build
 ENV HADOOP_VERSION 2.7.4
-ENV HIVE_VERSION 1.1.1
+ENV HIVE_VERSION 2.1.1
 ENV HADOOP_HOME /opt/hadoop
 ENV HIVE_HOME /opt/hive
 
@@ -29,8 +29,8 @@ tar xvf apache-hive-$HIVE_VERSION-bin.tar.gz
 
 RUN mkdir -p $HADOOP_HOME && \
     mkdir -p $HIVE_HOME && \
-	cp -r apache-hive-$HIVE_VERSION-bin $HIVE_HOME && \
-	cp -r hadoop-$HADOOP_VERSION $HADOOP_HOME && \
+	cp -r apache-hive-$HIVE_VERSION-bin/* $HIVE_HOME && \
+	cp -r hadoop-$HADOOP_VERSION/* $HADOOP_HOME && \
 	rm -rf /tmp/* /var/tmp/* && \
 	rm -rf apache-hive-$HIVE_VERSION* && \
 	rm -rf hadoop-$HADOOP_VERSION*
@@ -47,12 +47,13 @@ RUN passwd --unlock root
 RUN yum -y install wget && \
 	yum -y install mlocate && \
 	yum -y install which && \
-	yum -y install mysql-server mysql-connector-java && \
- 	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz" && \
-	tar xzf jdk-8u151-linux-x64.tar.gz && \
-	rm -rf jdk-8u151-linux-x64.tar.gz && \
-	mv jdk1.8.0_151 /usr/local/ && \
-	cd /usr/local/jdk1.8.0_151 && \
+	yum -y install mysql-server mysql-connector-java
+
+RUN wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz && \
+	tar xzf jdk-8u131-linux-x64.tar.gz && \
+	rm -rf jdk-8u131-linux-x64.tar.gz && \
+	mv jdk1.8.0_131 /usr/local/ && \
+	cd /usr/local/jdk1.8.0_131 && \
 	yum -y install mysql && \
 	yum -y install python-setuptools && \
 	easy_install supervisor
@@ -69,9 +70,9 @@ RUN mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
 	rm -rf /_build && \
 	chmod +x /usr/local/bin/*
 
-ENV JAVA_HOME /usr/local/jdk1.8.0_151
-ENV JRE_HOME /usr/local/jdk1.8.0_151/jre
-ENV PATH $PATH:/usr/local/jdk1.8.0_151/bin:/usr/local/jdk1.8.0_151/jre/bin
+ENV JAVA_HOME /usr/local/jdk1.8.0_131
+ENV JRE_HOME /usr/local/jdk1.8.0_131/jre
+ENV PATH $PATH:/usr/local/jdk1.8.0_131/bin:/usr/local/jdk1.8.0_131/jre/bin
 ENV PATH=$HIVE_HOME/bin:$HADOOP_HOME/bin:$PATH
 ENV HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
 
