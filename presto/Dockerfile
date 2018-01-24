@@ -19,6 +19,7 @@ RUN apt-get update && \
 
 # Mandatory environment variables for build
 ENV PRESTO_VERSION 0.184
+ENV TERM xterm-color
 ENV PRESTO_HOME /opt/presto
 ENV PRESTO_DATA_DIR /var/presto/
 ENV PRESTO_CONF_DIR $PRESTO_HOME/etc/catalog/
@@ -51,6 +52,8 @@ RUN cd $PRESTO_HOME/plugin/hive-hadoop2 && \
     curl -O http://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure/2.7.3/hadoop-azure-2.7.3.jar && \
     curl -O http://repo1.maven.org/maven2/com/microsoft/azure/azure-data-lake-store-sdk/2.1.5/azure-data-lake-store-sdk-2.1.5.jar && \
     curl -O http://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure-datalake/3.0.0-alpha3/hadoop-azure-datalake-3.0.0-alpha3.jar    
+
+RUN apt-get install nfs-common
 
 # COPY CONFIGURATION FILES
 COPY ./files /opt/
