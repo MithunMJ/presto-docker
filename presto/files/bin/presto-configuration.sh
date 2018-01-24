@@ -16,4 +16,10 @@ do
     mo ${conf_file}.mustache > ${conf_file}
 done
 
+if [ $PRESTO_COORDINATOR = "false" ]
+then
+mv ${PRESTO_HOME}/etc/worker-config.properties ${PRESTO_HOME}/etc/config.properties
+fi
+
+
 $@
