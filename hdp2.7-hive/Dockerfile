@@ -29,8 +29,8 @@ tar xvf apache-hive-$HIVE_VERSION-bin.tar.gz
 
 RUN mkdir -p $HADOOP_HOME && \
     mkdir -p $HIVE_HOME && \
-	mv apache-hive-$HIVE_VERSION-bin/* $HIVE_HOME && \
-	mv hadoop-$HADOOP_VERSION/* $HADOOP_HOME && \
+	cp -r apache-hive-$HIVE_VERSION-bin $HIVE_HOME && \
+	cp -r hadoop-$HADOOP_VERSION $HADOOP_HOME && \
 	rm -rf /tmp/* /var/tmp/* && \
 	rm -rf apache-hive-$HIVE_VERSION* && \
 	rm -rf hadoop-$HADOOP_VERSION*
