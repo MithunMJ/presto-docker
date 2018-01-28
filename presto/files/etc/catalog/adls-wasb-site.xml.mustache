@@ -16,7 +16,7 @@
 
         <property>
                 <name>dfs.adls.oauth2.refresh.url</name>
-                <value>https://login.microsoftonline.com/ADLS_TENANT_ID/oauth2/token</value>
+                <value>https://login.microsoftonline.com/{{ADLS_TENANT_ID}}/oauth2/token</value>
         </property>
 
         <property>
@@ -31,7 +31,7 @@
 
         <!-- Azure Blob Storage -->
         <property>
-                <name>fs.azure.account.key.AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net</name>
+                <name>fs.azure.account.key.{{AZURE_STORAGE_ACCOUNT_NAME}}.blob.core.windows.net</name>
                 <value>{{AZURE_STORAGE_ACCOUNT_KEY}}</value>
         </property>
   </configuration>
