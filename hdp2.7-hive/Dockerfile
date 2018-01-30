@@ -71,6 +71,9 @@ RUN mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
 	rm -rf /_build && \
 	chmod +x /usr/local/bin/*
 
+RUN mkdir -p /var/log/hive && \
+	touch /var/log/hive/hive-metastore.log
+
 ENV JAVA_HOME /usr/local/jdk1.8.0_131
 ENV JRE_HOME /usr/local/jdk1.8.0_131/jre
 ENV PATH $PATH:/usr/local/jdk1.8.0_131/bin:/usr/local/jdk1.8.0_131/jre/bin
