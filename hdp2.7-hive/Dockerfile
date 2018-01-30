@@ -87,4 +87,4 @@ ENV MYSQL_USER_NAME root
 ENV MYSQL_PASSWORD root
 
 ENTRYPOINT [ "hdp-hive-configuration.sh" ]
-CMD hive --service metastore
+CMD supervisord -c /etc/supervisord.conf
