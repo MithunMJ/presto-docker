@@ -142,5 +142,5 @@ ENV MYSQL_USER_NAME root
 ENV MYSQL_PASSWORD root
 
 WORKDIR $PRESTO_HOME
-ENTRYPOINT [ "hdp-hive-configuration.sh && presto-configuration.sh" ]
+ENTRYPOINT [ "presto-hdp-hive-configuration.sh" ]
 CMD supervisord -c /etc/supervisord.conf
