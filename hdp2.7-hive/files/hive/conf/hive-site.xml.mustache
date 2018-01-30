@@ -54,9 +54,21 @@
     </property>
 
     <property>
-        <name>hive.security.authorization.createtable.owner.grants</name>
-        <value>ALL</value>
-        <description>The set of privileges automatically granted to the owner whenever a table gets created.</description>
+      <name>hive.metastore.uris</name>
+      <value>{{HIVE_METASTORE_URI}}</value>
+      <description>IP address (or fully-qualified domain name) and port of the metastore host</description>
     </property>
+
+    <property>
+      <name>hive.msck.path.validation</name>
+      <value>ignore</value>
+    </property>
+
+    <property>
+      <name>hive.metastore.schema.verification</name>
+      <value>true</value>
+    </property>
+
+
 
 </configuration>
