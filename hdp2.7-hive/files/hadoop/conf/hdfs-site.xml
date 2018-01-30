@@ -15,14 +15,4 @@
   -->
 <configuration>
 
-    <property>
-        <name>dfs.namenode.name.dir</name>
-        <value>/var/lib/hadoop-hdfs/cache/name/</value>
-    </property>
-
-    <property>
-        <name>dfs.datanode.data.dir</name>
-        <value>/var/lib/hadoop-hdfs/cache/data/</value>
-    </property>
-
 </configuration>

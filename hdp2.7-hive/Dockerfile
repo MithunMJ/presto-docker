@@ -63,8 +63,9 @@ RUN ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connecto
 # Copy configuration files
 COPY ./files /_build
 
-#mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
-RUN mv /_build/hive/conf/* $HIVE_HOME/conf/ && \
+
+RUN mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
+	mv /_build/hive/conf/* $HIVE_HOME/conf/ && \
 	mv /_build/etc/* /etc/ && \
 	mv /_build/bin/* /usr/local/bin/ && \
 	rm -rf /_build && \
