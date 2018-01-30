@@ -1,0 +1,3 @@
+Hi {{NAME}},
+Welcome to {{SITE}}
+NAME=Mithun SITE=Voonik ./mo mo.test 

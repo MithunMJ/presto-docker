@@ -15,7 +15,8 @@ MAINTAINER Mithun Arunan <MithunMJ@github, mithun1848@gmail.com>
 
 # Update
 RUN apt-get update && \ 
-    apt-get install -y python uuid-runtime vim less jq
+    apt-get install -y python uuid-runtime vim less jq nfs-common
+
 
 # Mandatory environment variables for build
 ENV PRESTO_VERSION 0.184
@@ -53,7 +54,6 @@ RUN cd $PRESTO_HOME/plugin/hive-hadoop2 && \
     curl -O http://repo1.maven.org/maven2/com/microsoft/azure/azure-data-lake-store-sdk/2.1.5/azure-data-lake-store-sdk-2.1.5.jar && \
     curl -O http://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure-datalake/3.0.0-alpha3/hadoop-azure-datalake-3.0.0-alpha3.jar    
 
-RUN apt-get -y install nfs-common
 
 # COPY CONFIGURATION FILES
 COPY ./files /opt/
