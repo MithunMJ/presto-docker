@@ -121,7 +121,9 @@ RUN mv /_build/hadoop/conf/* $HADOOP_HOME/etc/hadoop/ && \
 	chmod +x /usr/local/bin/*
 
 RUN mkdir -p /var/log/hive && \
-	touch /var/log/hive/hive-metastore.log
+	mkdir -p /var/log/presto && \
+	touch /var/log/hive/hive-metastore.log && \
+	touch /var/log/presto/presto-server.log
 
 ENV JAVA_HOME /usr/local/jdk1.8.0_131
 ENV JRE_HOME /usr/local/jdk1.8.0_131/jre
